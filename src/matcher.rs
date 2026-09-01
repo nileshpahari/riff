@@ -22,14 +22,15 @@ pub fn matches(args: &Args, path: &Path, meta: &Metadata) -> bool {
         }
     }
 
-    if let Some(filename) = path.file_name() {
-        if let Some(name) = &args.name {
-            if name.as_str() != filename {
+    if let Some(name) = &args.name {
+        let Some(filename) = path.file_name() else {
                 return false;
-            }
+        };
+
+        if filename != name.as_str() {
+            return false;
         }
-    } else {
-        return false;
     }
+
     true
 }
