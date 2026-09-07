@@ -26,21 +26,15 @@ impl Matcher {
         })
     }
 
-    pub fn matches(&self, name: &OsStr, meta: &Metadata) -> bool {
-        if let Some(kind) = self.kind {
-            let kind_match = match kind {
-                Kind::File => meta.is_file(),
-                Kind::Dir => meta.is_dir(),
-                Kind::Symlink => meta.is_symlink(),
-            };
-            if !kind_match {
+    if let Some(name) = &args.name {
+        let Some(filename) = path.file_name() else {
                 return false;
-            }
-        }
+        };
 
-        match &self.name {
-            Some(patt) => patt.matches(name.as_bytes()),
-            None => true,
+        if filename != name.as_str() {
+            return false;
         }
     }
+
+    true
 }
